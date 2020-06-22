@@ -2135,13 +2135,26 @@ The original and patched dumps can be obtained with IOReg when using a debug ver
   
   
 ## VGA support  
-In most cases with Intel Skylake and newer it works by default.  
-For Ivy Bridge and possibly other generations there are the options to patch your connectors with the following:  
-06020000 02000000 30000000 // Option 1  
-06020000 01000000 30000000 // Option 2  
-On OS X 10.8.2 and newer it is impossible to have VGA on Ivy Bridge systems.  
-Hot-plugging VGA usually does not work.  
-In case this doesn't help - there are no other known solutions at this time.  
+For Sandy Bridge HD3000, VGA support is provided by patching one of the 3 x DVI output ports (0205... / 0304... / 0406...) of the SNB framebuffer as follows:
+06020000 00010000 xx000000  // where xx = port number
+
+For Ivy Bridge HD4000, VGA can be supported up to ML 10.8.1 by patching one of the 3 x DVI output ports (0205... / 0304... / 0406...) of the Capri framebuffer as follows:  
+06020000 02000000 30020000
+06020000 02000000 30000000
+06020000 xx yy 0000 07010000
+06020000 xx yy 0000 07000000
+06020000 xx yy 0000 81000000
+06020000 xx yy 0000 06000000
+06020000 xx yy 0000 09000000
+where xx yy can be any combination of 10 00 / 00 10 / 00 01
+From ML 10.8.2, VGA patch on Ivy Bridge HD4000 is no longer supported.
+
+For Haswell & Broadwell graphics, VGA is totally unsupported, except on Haswell HD4400 for which it works natively/by default.
+
+For Skylake and later, VGA works either natively/by default or not at all.
+
+Hot-plugging VGA does not usually work.
+If none of the above helps, note that there are no other known solution at this time.
   
   
 ## EDID  
